@@ -3,7 +3,10 @@ package com.example.ForoHub.domain.usuario;
 import com.example.ForoHub.domain.perfil.Perfil;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Set;
 
 @Getter
@@ -12,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name="usuarios")
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
     private String nombre;
     @Column(name="email", unique=true, nullable=false)
@@ -31,4 +34,13 @@ public class Usuario {
         this.contrasena = datos.contrasena();
         this.perfiles = datos.perfiles();
     }
+
+    // UserDetails
+    @Override public Collection<? extends GrantedAuthority> getAuthorities() { return perfiles; }
+    @Override public String getPassword() { return contrasena; }
+    @Override public String getUsername() { return email; }
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
 }
