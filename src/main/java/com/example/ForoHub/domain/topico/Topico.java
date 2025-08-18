@@ -4,6 +4,7 @@ import com.example.ForoHub.domain.curso.Curso;
 import com.example.ForoHub.domain.respuesta.Respuesta;
 import com.example.ForoHub.domain.usuario.Usuario;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,9 +39,29 @@ public class Topico {
     public Topico(DatosRegistroTopicoDTO datos, Usuario autor, Curso curso){
         this.titulo = datos.titulo();
         this.mensaje = datos.mensaje();
-        this.fechaCreacion = LocalDateTime.now();
-        this.status = TopicoStatus.ABIERTO;
         this.autor = autor;
         this.curso = curso;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.fechaCreacion == null) {
+            this.fechaCreacion = LocalDateTime.now();
+        }
+    }
+
+    public void actualizarTopico(@Valid DatosActualizarTopicoDTO datos, Curso nuevoCurso){
+        if (datos.titulo() != null && !datos.titulo().isBlank()) {
+           this.titulo = datos.titulo();
+        }
+        if (datos.mensaje() != null && !datos.mensaje().isBlank()) {
+            this.mensaje = datos.mensaje();
+        }
+        if (datos.status() != null) {
+            this.status = datos.status();
+        }
+        if (nuevoCurso != null) {
+            this.curso = nuevoCurso;
+        }
     }
 }

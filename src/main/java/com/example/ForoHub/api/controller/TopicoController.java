@@ -1,11 +1,8 @@
 package com.example.ForoHub.api.controller;
 
-import com.example.ForoHub.api.dto.DatosDetalleTopicoDTO;
+import com.example.ForoHub.domain.topico.DatosDetalleTopicoDTO;
 import com.example.ForoHub.domain.curso.CursoRepository;
-import com.example.ForoHub.domain.topico.DatosListaTopicoDTO;
-import com.example.ForoHub.domain.topico.DatosRegistroTopicoDTO;
-import com.example.ForoHub.domain.topico.Topico;
-import com.example.ForoHub.domain.topico.TopicoRepository;
+import com.example.ForoHub.domain.topico.*;
 import com.example.ForoHub.domain.usuario.UsuarioRepository;
 import com.example.ForoHub.infra.exceptions.DuplicateResourceException;
 import jakarta.persistence.EntityNotFoundException;
@@ -72,4 +69,31 @@ public class TopicoController {
         return ResponseEntity.ok(new DatosListaTopicoDTO(topico));
     }
 
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> actualizarTopico(@PathVariable Long id, @RequestBody @Valid DatosActualizarTopicoDTO datos) {
+        var optional = topicoRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new jakarta.persistence.EntityNotFoundException("El tópico con id " + id + " no existe");
+        }
+        var topico = optional.get();
+
+        if (datos.titulo() != null && !datos.titulo().isBlank()
+                && datos.mensaje() != null && !datos.mensaje().isBlank()
+                && topicoRepository.existsByTituloAndMensajeAndIdNot(datos.titulo(), datos.mensaje(), id)) {
+            throw new com.example.ForoHub.infra.exceptions.DuplicateResourceException(
+                    "Ya existe otro tópico con el mismo título y mensaje."
+            );
+        }
+
+        var nuevoCurso = (datos.cursoId() != null)
+                ? cursoRepository.findById(datos.cursoId())
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Curso no existe: " + datos.cursoId()))
+                : null;
+
+        topico.actualizarTopico(datos, nuevoCurso);
+        topicoRepository.save(topico);
+
+        return ResponseEntity.ok(new DatosDetalleTopicoDTO(topico));
+    }
 }

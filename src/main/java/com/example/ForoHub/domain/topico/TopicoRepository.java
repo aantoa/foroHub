@@ -9,4 +9,5 @@ public interface TopicoRepository extends JpaRepository <Topico, Long>{
     boolean existsByTituloAndMensaje(String titulo, String mensaje);
     Page<Topico> findByCurso_NombreIgnoreCaseAndFechaCreacionBetween(
             String nombreCurso, LocalDateTime inicio, LocalDateTime fin, Pageable pageable);
+    boolean existsByTituloAndMensajeAndIdNot(String titulo, String mensaje, Long id);
 }
