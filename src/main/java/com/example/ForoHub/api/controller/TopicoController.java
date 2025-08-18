@@ -50,7 +50,7 @@ public class TopicoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DatosListaTopicoDTO>> listarMedicos(
+    public ResponseEntity<Page<DatosListaTopicoDTO>> listarTopicos(
             @RequestParam(required=false) String curso,
             @RequestParam(required=false) Integer anio,
             @PageableDefault(size = 10, sort = {"fechaCreacion"}, direction = Sort.Direction.ASC) Pageable paginacion) {
@@ -64,4 +64,12 @@ public class TopicoController {
         var page = topicoRepository.findAll(paginacion).map(DatosListaTopicoDTO::new);
         return ResponseEntity.ok(page);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DatosListaTopicoDTO> listarTopico(@PathVariable Long id) {
+        var topico = topicoRepository.findById(id).
+                orElseThrow(() -> new EntityNotFoundException("El tópico con id " + id + " no existe"));
+        return ResponseEntity.ok(new DatosListaTopicoDTO(topico));
+    }
+
 }

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record DatosListaTopicoDTO(
-        Long id,
+
         String titulo,
         String mensaje,
         TopicoStatus topicoStatus,
@@ -15,7 +15,7 @@ public record DatosListaTopicoDTO(
         Long cursoId)
 {
     public DatosListaTopicoDTO (Topico topico){
-        this(topico.getId(),
+        this(
                 topico.getTitulo(),
                 topico.getMensaje(),
                 topico.getStatus(),
