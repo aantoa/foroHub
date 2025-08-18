@@ -96,4 +96,17 @@ public class TopicoController {
 
         return ResponseEntity.ok(new DatosDetalleTopicoDTO(topico));
     }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        var optional = topicoRepository.findById(id);
+
+        if (!optional.isPresent()) {
+            throw new EntityNotFoundException("El tópico con id " + id + " no existe");
+        }
+
+        topicoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
