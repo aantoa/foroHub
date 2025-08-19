@@ -30,7 +30,7 @@ Ahora la API cuenta con autenticación y autorización con JWT 🔐.
 ## ⚙️ Instalación y configuración
 ### 1️⃣ Clonar el repositorio
 ```
-git clone https://github.com/tu-usuario/foro-hub.git
+git clone https://github.com/aantoa/foroHub.git
 cd foro-hub
 ```
 ### 2️⃣ Configurar base de datos
