@@ -1,7 +1,18 @@
 # ForoHub API 📚💻
+[![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-green.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-17%2B-blue.svg)](https://www.oracle.com/java/technologies/downloads/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.9-brightgreen?logo=springboot)](https://spring.io/projects/spring-boot)
+[![Maven](https://img.shields.io/badge/Maven-3.8.1-blue?logo=apachemaven)](https://maven.apache.org/)
+[![Spring Security](https://img.shields.io/badge/Spring_Security-Enabled-3CB371?logo=springsecurity)](https://spring.io/projects/spring-security)
+[![JWT](https://img.shields.io/badge/JWT-Auth-black?logo=jsonwebtokens)](https://jwt.io/)
+[![Auth0 Java JWT](https://img.shields.io/badge/Auth0-java--jwt-EB5424?logo=auth0)](https://github.com/auth0/java-jwt)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql)](https://www.mysql.com/)
+[![Flyway](https://img.shields.io/badge/Flyway-Migrations-CC0200?logo=flyway)](https://flywaydb.org/)
+[![Lombok](https://img.shields.io/badge/Lombok-Used-BC2C1A)](https://projectlombok.org/)
 
 Proyecto desarrollado como parte del **Challenge Back End - Alura Latam**.  
 El objetivo es construir una API REST para un foro de discusión, donde estudiantes y profesores pueden crear tópicos, responderlos y mantener la colaboración.
+Ahora la API cuenta con autenticación y autorización con JWT 🔐.
 
 ---
 
@@ -13,13 +24,32 @@ El objetivo es construir una API REST para un foro de discusión, donde estudian
 - **Flyway** (migraciones de base de datos)
 - **MySQL 8**
 - **Lombok**
+- **Auth0 Java JWT**
 
 ---
+## ⚙️ Instalación y configuración
+### 1️⃣ Clonar el repositorio
+```
+git clone https://github.com/tu-usuario/foro-hub.git
+cd foro-hub
+```
+### 2️⃣ Configurar base de datos
+```
+CREATE DATABASE foro_hub;
+```
+### 3️⃣ Variables de entorno
+En tu sistema o en IntelliJ IDEA / Spring Boot run configuration, define:
+```
+DB_HOST=localhost
+DB_NAME=foro_hub
+DB_USER=usuario
+DB_PASSWORD=password
+JWT_SECRET=clave_secreta
+```
+Estas variables son usadas en `applications.properties`
 
-## 🗄️ Base de datos
-
+### 4️⃣ Ejecutar migraciones
 Migraciones gestionadas con **Flyway** (`db/migration`):
-
 - `V1__create_table_usuarios.sql`
 - `V2__create_table_perfiles.sql`
 - `V3__create_table_usuarios_perfiles.sql`
@@ -30,10 +60,28 @@ Migraciones gestionadas con **Flyway** (`db/migration`):
 Además, se incluyen **semillas iniciales** (`INSERT`) para:
 - Usuarios (perfiles `ROLE_ADMIN`, `ROLE_MODERATOR`, `ROLE_PROFESSOR`, `ROLE_USER` )
 - Cursos
+- Usuario administrador (`admin@forohub.com / admin123`)
+- Usuario estudiante (`user_student@forohub.com / user123`)
+
+### 5️⃣ Correr la aplicación
+
+```
+./mvnw spring-boot:run
+```
+o desde IntelliJ ejecutando la clase principal `ForoHubApplication`.
 
 ---
 
-## 📌 Funcionalidades implementadas hasta ahora
+## 📌 Endpoints implementados
+Por defecto, la app levanta en:
+```
+http://localhost:8080
+```
+### 🔐 Autenticación con JWT
+- **Login**:
+  - `POST /auth/login`
+  - Ingresa credenciales ingresadas de usuario: email y password y devuelve un token
+  - Una vez obtenido el token, este se debe enviar en el header de cada request
 
 ### 🔹 Tópicos
 - **Crear** un tópico:
@@ -88,8 +136,22 @@ Centralizado en `GlobalExceptionHandler`:
 - **422**: recurso duplicado (`DuplicateResourceException`)
 
 ---
-
 ## 📬 Ejemplos de requests (Insomnia/Postman)
+### Login 
+- Request
+```json
+{
+  "email": "user_student@forohub.com",
+  "password": "user123"
+}
+```
+- Response
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "type": "Bearer"
+}
+```
 
 ### Crear tópico
 ```json
@@ -115,15 +177,78 @@ PUT /topicos/1
 ```json
 DELETE /topicos/1
 ```
-## 📌 Próximos pasos
+## 📸 Capturas
 
-- Implementar autenticación JWT.
+- ### Login
+  - Login exitoso
+  
+  ![img.png](img/img.png)
 
-- Endpoints para Respuestas. (Opcional)
+  - Error en el login
+  
+  ![img_1.png](img/img_1.png)
 
-- Gestión de Usuarios y Perfiles. (Opcional)
+- ### Crear tópico exitoso ✅
 
-- Documentación con Swagger. (Opcional)
+    ![img_2.png](img/img_2.png)
+
+- ### Actualización de tópico ✏️
+
+    ![img_3.png](img/img_3.png)
+
+- ### Eliminación de tópico 🗑️
+    
+    ![img_4.png](img/img_4.png)
+
+- ### Listar tópico por ID 🔎
+    
+    ![img_5.png](img/img_5.png)
+
+  - ### Listar todos los tópicos 📑
+
+    - Listar todos sin filtros
+
+    ![img_14.png](img/img_14.png)
+  
+  - Listar topicos con filtros opcionales: 
+    
+    ![img_15.png](img/img_15.png) 
+
+- ### Validación 400 (Bad Request) 🚫
+  
+    ![img_16.png](img/img_16.png)
+
+  - ### Validación 404 (Usuario, curso, topico no existe) 🚫
+
+      - Crear Topico
+      
+        ![img_9.png](img/img_9.png)
+    
+        ![img_7.png](img/img_7.png)
+
+      - Listar Topico
+        
+        ![img_6.png](img/img_6.png)
+    
+      - Actualizar topico
+    
+        ![img_10.png](img/img_10.png)
+    
+      - Eliminar topico
+        
+        ![img_11.png](img/img_11.png)
+
+- ### Validación 422 (Tópico duplicado) 🚫
+
+  - Crear Topico
+        
+    ![img_12.png](img/img_12.png)
+  
+  - Actualizar topico
+  
+    ![img_13.png](img/img_13.png)
+
+---
 
 ## 👨‍💻 Autor
 
