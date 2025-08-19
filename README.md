@@ -182,11 +182,11 @@ DELETE /topicos/1
 - ### Login
   - Login exitoso
   
-  ![img.png](img/img.png)
+    ![img.png](img/img.png)
 
   - Error en el login
   
-  ![img_1.png](img/img_1.png)
+    ![img_1.png](img/img_1.png)
 
 - ### Crear tópico exitoso ✅
 
@@ -204,39 +204,39 @@ DELETE /topicos/1
     
     ![img_5.png](img/img_5.png)
 
-  - ### Listar todos los tópicos 📑
-
-    - Listar todos sin filtros
-
-    ![img_14.png](img/img_14.png)
-  
-  - Listar topicos con filtros opcionales: 
+- ### Listar todos los tópicos 📑
     
+  - Listar todos sin filtros
+    
+    ![img_14.png](img/img_14.png)
+      
+  - Listar topicos con filtros opcionales: 
+        
     ![img_15.png](img/img_15.png) 
 
 - ### Validación 400 (Bad Request) 🚫
   
     ![img_16.png](img/img_16.png)
 
-  - ### Validación 404 (Usuario, curso, topico no existe) 🚫
+- ### Validación 404 (Usuario, curso, topico no existe) 🚫
 
-      - Crear Topico
+  - Crear Topico
       
-        ![img_9.png](img/img_9.png)
+    ![img_9.png](img/img_9.png)
     
-        ![img_7.png](img/img_7.png)
+    ![img_7.png](img/img_7.png)
 
-      - Listar Topico
+  - Listar Topico
         
-        ![img_6.png](img/img_6.png)
+    ![img_6.png](img/img_6.png)
     
-      - Actualizar topico
+  - Actualizar topico
     
-        ![img_10.png](img/img_10.png)
+    ![img_10.png](img/img_10.png)
     
-      - Eliminar topico
+  - Eliminar topico
         
-        ![img_11.png](img/img_11.png)
+    ![img_11.png](img/img_11.png)
 
 - ### Validación 422 (Tópico duplicado) 🚫
 
